@@ -2,64 +2,84 @@ import 'package:crime_app/authentication.dart';
 import 'package:crime_app/home.dart';
 import 'package:crime_app/signup.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 class Login extends StatelessWidget {
+  const Login({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.all(8.0),
-        children: <Widget>[
-          const SizedBox(height: 80),
-          // logo
-          Column(
-            children: const [
-              FlutterLogo(
-                size: 55,
-              ),
-              SizedBox(height: 50),
-              Text(
-                'Welcome back!',
-                style: TextStyle(fontSize: 24),
-              ),
-            ],
+      body: Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: ExactAssetImage('assets/images/justice1.jpg'),
+            fit: BoxFit.cover,
           ),
-
-          const SizedBox(
-            height: 50,
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
+          child: Container(
+            decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+            child: ListView(
+              padding: const EdgeInsets.all(8.0),
+              children: <Widget>[
+                const SizedBox(height: 80),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 0.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 26.0, vertical: 30.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: const Color.fromARGB(174, 110, 87, 87),
+                  ),
+                  child: Column(
+                    children: [
+                      const LoginForm(),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const SizedBox(width: 30),
+                          const Text('New here ? ',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20)),
+                          GestureDetector(
+                            onTap: () {
+                              // Navigator.pushNamed(context, '/signup');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Signup()));
+                            },
+                            child: const Text('Register Now!!',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 20,
+                                    color: Color.fromARGB(255, 255, 255, 255))),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: LoginForm(),
-          ),
-
-          const SizedBox(height: 20),
-
-          Row(
-            children: <Widget>[
-              const SizedBox(width: 30),
-              const Text('New here ? ',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              GestureDetector(
-                onTap: () {
-                  // Navigator.pushNamed(context, '/signup');
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Signup()));
-                },
-                child: const Text('Get Registered Now!!',
-                    style: TextStyle(fontSize: 20, color: Colors.blue)),
-              )
-            ],
-          ),
-        ],
+        ),
+        // child:
       ),
     );
   }
 }
 
 class LoginForm extends StatefulWidget {
-  LoginForm({Key? key}) : super(key: key);
+  const LoginForm({Key? key}) : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -83,10 +103,28 @@ class _LoginFormState extends State<LoginForm> {
           // email
           TextFormField(
             // initialValue: 'Input text',
+
             decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.email_outlined),
+              labelStyle: TextStyle(color: Colors.white),
+              prefixIcon: Icon(
+                Icons.email_outlined,
+                color: Colors.white,
+              ),
               labelText: 'Email',
               border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.all(
                   Radius.circular(100.0),
                 ),
@@ -110,9 +148,26 @@ class _LoginFormState extends State<LoginForm> {
           TextFormField(
             // initialValue: 'Input text',
             decoration: InputDecoration(
+              labelStyle: const TextStyle(color: Colors.white),
               labelText: 'Password',
-              prefixIcon: const Icon(Icons.lock_outline),
+              prefixIcon: const Icon(
+                Icons.lock_outline,
+                color: Colors.white,
+              ),
               border: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.all(
                   Radius.circular(100.0),
                 ),
@@ -125,6 +180,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
                 child: Icon(
                   _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -170,11 +226,13 @@ class _LoginFormState extends State<LoginForm> {
                 }
               },
               style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
                   shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(24.0)))),
+                      borderRadius: BorderRadius.all(Radius.circular(100)))),
               child: const Text(
                 'Login',
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(
+                    fontSize: 24, color: Color.fromARGB(215, 110, 87, 87)),
               ),
             ),
           ),
