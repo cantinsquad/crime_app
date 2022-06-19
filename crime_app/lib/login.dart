@@ -1,5 +1,6 @@
 import 'package:crime_app/authentication.dart';
 import 'package:crime_app/home.dart';
+import 'package:crime_app/imagepicker.dart';
 import 'package:crime_app/signup.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -212,8 +213,10 @@ class _LoginFormState extends State<LoginForm> {
                       .signIn(email: email!, password: password!)
                       .then((result) {
                     if (result == null) {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => Home()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CameraWidget()));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(

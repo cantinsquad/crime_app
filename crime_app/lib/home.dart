@@ -3,15 +3,38 @@ import 'package:crime_app/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'imagefromgallery.dart';
 
 enum ImageSourceType { gallery, camera }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  var _image;
+
+  var imagePicker;
+
+  var type;
+
   void _handleURLButtonPress(BuildContext context, var type) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ImageFromGalleryEx(type)));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    imagePicker = ImagePicker();
   }
 
   @override
@@ -23,21 +46,21 @@ class Home extends StatelessWidget {
                 .signOut()
                 .then((_) => Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (contex) => Login()),
+                      MaterialPageRoute(builder: (contex) => const Login()),
                     ));
           },
-          child: Icon(Icons.logout),
           tooltip: 'Logout',
+          child: const Icon(Icons.logout),
         ),
         appBar: AppBar(
-          title: Text("Image Picker Example"),
+          title: const Text("Image Picker Example"),
         ),
         body: Center(
           child: Column(
             children: [
               MaterialButton(
                 color: Colors.blue,
-                child: Text(
+                child: const Text(
                   "Pick Image from Gallery",
                   style: TextStyle(
                       color: Colors.white70, fontWeight: FontWeight.bold),
@@ -48,7 +71,7 @@ class Home extends StatelessWidget {
               ),
               MaterialButton(
                 color: Colors.blue,
-                child: Text(
+                child: const Text(
                   "Pick Image from Camera",
                   style: TextStyle(
                       color: Colors.white70, fontWeight: FontWeight.bold),

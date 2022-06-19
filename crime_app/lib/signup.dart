@@ -1,5 +1,6 @@
 import 'package:crime_app/authentication.dart';
 import 'package:crime_app/home.dart';
+import 'package:crime_app/imagepicker.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -80,21 +81,21 @@ class Signup extends StatelessWidget {
                         ])))));
   }
 
-  Container buildLogo() {
-    return Container(
-      height: 80,
-      width: 80,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.blue),
-      child: const Center(
-        child: Text(
-          "T",
-          style: TextStyle(color: Colors.white, fontSize: 60.0),
-        ),
-      ),
-    );
-  }
+  // Container buildLogo() {
+  //   return Container(
+  //     height: 80,
+  //     width: 80,
+  //     decoration: const BoxDecoration(
+  //         borderRadius: BorderRadius.all(Radius.circular(10)),
+  //         color: Colors.blue),
+  //     child: const Center(
+  //       child: Text(
+  //         "T",
+  //         style: TextStyle(color: Colors.white, fontSize: 60.0),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 class SignupForm extends StatefulWidget {
@@ -135,7 +136,7 @@ class _SignupFormState extends State<SignupForm> {
           TextFormField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelStyle: TextStyle(color: Colors.white),
+              labelStyle: const TextStyle(color: Colors.white),
               prefixIcon: const Icon(
                 Icons.email_outlined,
                 color: Colors.white,
@@ -161,7 +162,7 @@ class _SignupFormState extends State<SignupForm> {
           TextFormField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelStyle: TextStyle(color: Colors.white),
+              labelStyle: const TextStyle(color: Colors.white),
               labelText: 'Full name',
               prefixIcon: const Icon(
                 Icons.account_circle,
@@ -225,7 +226,7 @@ class _SignupFormState extends State<SignupForm> {
           TextFormField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelStyle: TextStyle(color: Colors.white),
+              labelStyle: const TextStyle(color: Colors.white),
               labelText: 'Confirm Password',
               prefixIcon: const Icon(
                 Icons.lock_outline,
@@ -256,8 +257,8 @@ class _SignupFormState extends State<SignupForm> {
                   // fillColor: MaterialStateProperty.resolveWith(),
 
                   activeColor: Colors.white,
-                  checkColor: Color.fromARGB(215, 110, 87, 87),
-                  shape: CircleBorder(),
+                  checkColor: const Color.fromARGB(215, 110, 87, 87),
+                  shape: const CircleBorder(),
                   onChanged: (_) {
                     setState(() {
                       agree = !agree;
@@ -292,8 +293,10 @@ class _SignupFormState extends State<SignupForm> {
                       .signUp(email: email!, password: password!)
                       .then((result) {
                     if (result == null) {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => Home()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CameraWidget()));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
