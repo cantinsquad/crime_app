@@ -103,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
           // email
           TextFormField(
             // initialValue: 'Input text',
-
+            style: const TextStyle(color: Colors.white),
             decoration: const InputDecoration(
               labelStyle: TextStyle(color: Colors.white),
               prefixIcon: Icon(
@@ -146,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
 
           // password
           TextFormField(
-            // initialValue: 'Input text',
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelStyle: const TextStyle(color: Colors.white),
               labelText: 'Password',
