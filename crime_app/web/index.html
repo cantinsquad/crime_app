@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://unpkg.com/canvaskit-wasm@0.33.0/bin/canvaskit.js"></script>
+  <link rel="preload" href="https://unpkg.com/canvaskit-wasm@0.33.0/bin/canvaskit.wasm" as="fetch" crossOrigin="anonymous">
+
+  <!-- Firebase part -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+
+  <script>
+    var firebaseConfig = {
+  apiKey: "AIzaSyA8zUkQg-plWAS1hnd5JJoZ9EGxVizCP7I",
+  authDomain: "crimeapp-b8e03.firebaseapp.com",
+  projectId: "crimeapp-b8e03",
+  storageBucket: "crimeapp-b8e03.appspot.com",
+  messagingSenderId: "762789523216",
+  appId: "1:762789523216:web:22e4f42ecee28c7fe67f95"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+      <script src="main.dart.js" type="application/javascript"></script>
+
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
