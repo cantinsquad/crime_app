@@ -46,9 +46,9 @@ class Signup extends StatelessWidget {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                    Column(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.center,
                                       children: <Widget>[
                                         const Padding(
                                           padding: EdgeInsets.only(right: 8.0),

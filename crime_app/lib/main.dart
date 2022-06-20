@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
           }
         }
         return MaterialApp(
+          theme: ThemeData(fontFamily: 'Libre'),
           debugShowCheckedModeBanner: false,
           title: 'Crime App',
           home: home,

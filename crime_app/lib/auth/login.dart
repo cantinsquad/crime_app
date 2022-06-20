@@ -1,7 +1,7 @@
 import 'package:crime_app/auth/authentication.dart';
 import 'package:crime_app/backup_imageuploader/home.dart';
 import 'package:crime_app/image/imagepicker.dart';
-import 'package:crime_app/signup.dart';
+import 'package:crime_app/auth/signup.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -47,6 +47,7 @@ class Login extends StatelessWidget {
                           const SizedBox(width: 30),
                           const Text('New here ? ',
                               style: TextStyle(
+                                  fontFamily: 'Libre',
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20)),
@@ -58,8 +59,9 @@ class Login extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: (context) => const Signup()));
                             },
-                            child: const Text('Register Now!!',
+                            child: const Text('Register Now',
                                 style: TextStyle(
+                                    fontFamily: 'Libre',
                                     decoration: TextDecoration.underline,
                                     fontSize: 20,
                                     color: Color.fromARGB(255, 255, 255, 255))),
@@ -104,7 +106,10 @@ class _LoginFormState extends State<LoginForm> {
           // email
           TextFormField(
             // initialValue: 'Input text',
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'Libre',
+            ),
             decoration: const InputDecoration(
               labelStyle: TextStyle(color: Colors.white),
               prefixIcon: Icon(
@@ -147,7 +152,10 @@ class _LoginFormState extends State<LoginForm> {
 
           // password
           TextFormField(
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'Libre',
+            ),
             decoration: InputDecoration(
               labelStyle: const TextStyle(color: Colors.white),
               labelText: 'Password',
@@ -235,7 +243,9 @@ class _LoginFormState extends State<LoginForm> {
               child: const Text(
                 'Login',
                 style: TextStyle(
-                    fontSize: 24, color: Color.fromARGB(215, 110, 87, 87)),
+                    fontFamily: 'Libre',
+                    fontSize: 24,
+                    color: Color.fromARGB(215, 110, 87, 87)),
               ),
             ),
           ),
