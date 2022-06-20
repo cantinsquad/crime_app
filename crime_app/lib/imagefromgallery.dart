@@ -29,37 +29,37 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
   }
 
   Future<LocationData> getloc() async {
-    Location location = new Location();
+    Location location = Location();
 
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-    LocationData _locationData;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    LocationData locationData;
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
         return Future.error('Location services are disabled.');
       }
     }
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return Future.error('Location services are disabled.');
       }
     }
 
-    _locationData = await location.getLocation();
-    print(_locationData);
-    return _locationData;
+    locationData = await location.getLocation();
+    print(locationData);
+    return locationData;
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController cont = new TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    TextEditingController cont = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     String firnumber = "";
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +114,7 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                 return Text("loc" + snap.data.toString());
               }),
           Form(
-            key: _formKey,
+            key: formKey,
             child: TextFormField(
               // initialValue: 'Input text',
 

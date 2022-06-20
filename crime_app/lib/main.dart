@@ -7,7 +7,7 @@ import 'login.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,14 +20,15 @@ class MyApp extends StatelessWidget {
       future: SharedPreferences.getInstance(),
       initialData: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        Widget home = Login();
+        Widget home = const Login();
         if (snapshot.data != null) {
           SharedPreferences pref = snapshot.data;
           if (pref.getBool('auth') ?? false) {
-            home = Home();
+            home = const Home();
           }
         }
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Flutter auth Demo',
           home: home,
         );
