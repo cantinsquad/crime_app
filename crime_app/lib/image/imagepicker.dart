@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
+import 'package:crime_app/fir_output/output.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:crime_app/authentication.dart';
-import 'package:crime_app/login.dart';
+import 'package:crime_app/auth/authentication.dart';
+import 'package:crime_app/auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -163,6 +164,10 @@ class CameraWidgetState extends State {
 
     resp.stream.transform(utf8.decoder).listen((value) {
       print(value);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FIROutput(value: {value})),
+      );
     });
   }
 

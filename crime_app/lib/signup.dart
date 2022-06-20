@@ -1,6 +1,6 @@
-import 'package:crime_app/authentication.dart';
-import 'package:crime_app/home.dart';
-import 'package:crime_app/imagepicker.dart';
+import 'package:crime_app/auth/authentication.dart';
+import 'package:crime_app/backup_imageuploader/home.dart';
+import 'package:crime_app/image/imagepicker.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
