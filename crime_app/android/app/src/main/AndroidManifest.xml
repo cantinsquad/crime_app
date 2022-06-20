@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.crime_app">
+    <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
         android:label="crime_app"
         android:name="${applicationName}"
@@ -28,7 +30,6 @@
 <!-- look at this if any error there -->
             <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
             <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/> -->
-
 
         </activity>
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
@@ -6,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:crime_app/authentication.dart';
 import 'package:crime_app/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class CameraWidget extends StatefulWidget {
   const CameraWidget({super.key});
@@ -18,6 +22,7 @@ class CameraWidget extends StatefulWidget {
 
 class CameraWidgetState extends State {
   List<XFile> imageFiles = [];
+  var uid = "";
 
   Future<LocationData> getloc() async {
     Location location = Location();
@@ -47,6 +52,7 @@ class CameraWidgetState extends State {
     return locationData;
   }
 
+  // List<XFile>? imageFileList = [];
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -108,15 +114,100 @@ class CameraWidgetState extends State {
     }
   }
 
+  String firnumber = "";
+
+  @override
+  void initState() {
+    super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    uid = user!.uid;
+  }
+
+  Future<void> onUpload() async {
+    const url = "https://f8bf-20-2-82-58.ap.ngrok.io/addReport";
+
+    var x = await getloc();
+
+    // Map d = {
+    //   "fir": firnumber,
+    //   "uid": uid,
+    //   "lat": x.latitude,
+    //   "long": x.longitude
+    // };
+
+    var request = http.MultipartRequest("POST", Uri.parse(url));
+
+    List<http.MultipartFile> newList = [];
+
+    for (var img in imageFiles) {
+      if (img.path != "") {
+        var multipartFile = await http.MultipartFile.fromPath(
+          'images',
+          img.path,
+          filename: img.name,
+        );
+        newList.add(multipartFile);
+      }
+    }
+
+    request.files.addAll(newList);
+
+    request.fields['fir'] = firnumber;
+    request.fields['uid'] = uid;
+    request.fields['lat'] = x.latitude.toString();
+    request.fields['long'] = x.longitude.toString();
+
+    var resp = await request.send();
+
+    print(resp.statusCode);
+
+    resp.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    String firnumber = "";
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
           constraints: BoxConstraints(
             minHeight: MediaQuery.of(context).size.height,
+            // appBar: AppBar(
+            //   title: const Text("Pick Image Camera"),
+            //   backgroundColor: Colors.green,
+            // ),
+            // body: Center(
+            //   child: Container(
+            //     child: Column(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Card(
+            //           child: (imageFileList == null || imageFileList!.isEmpty)
+            //               ? const Text("")
+            //               : Image.file(File(imageFileList![0].path)),
+            //         ),
+            //         MaterialButton(
+            //           textColor: Colors.white,
+            //           color: Colors.pink,
+            //           onPressed: () {
+            //             _showChoiceDialog(context);
+            //           },
+            //           child: const Text("Select Image"),
+            //         ),
+            //         (imageFileList != null)
+            //             ? MaterialButton(
+            //                 textColor: Colors.white,
+            //                 color: Colors.pink,
+            //                 onPressed: () {
+            //                   _showChoiceDialog(context);
+            //                 },
+            //                 child: const Text("Upload Image"),
+            //               )
+            //             : const Text("")
+            //       ],
           ),
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -127,7 +218,7 @@ class CameraWidgetState extends State {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.5, sigmaY: 5.5),
             child: Container(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
               child: Column(
                 // crossAxisAlignment: Cro,
@@ -212,7 +303,7 @@ class CameraWidgetState extends State {
                       },
                     ),
                   ),
-                  imageFiles.length != 0
+                  imageFiles.isNotEmpty
                       ? Wrap(
                           children: imageFiles.map((imageone) {
                             return Container(
@@ -259,7 +350,7 @@ class CameraWidgetState extends State {
                   // ),
                   ElevatedButton(
                     onPressed: () {
-                      if (imageFiles.length == 0) {
+                      if (imageFiles.isEmpty) {
                         _showChoiceDialog(context);
                       } else {
                         setState(() {
@@ -274,7 +365,7 @@ class CameraWidgetState extends State {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(100.0)))),
                     child: Text(
-                      imageFiles.length != 0 ? 'Clear image' : 'Select Image',
+                      imageFiles.isNotEmpty ? 'Clear image' : 'Select Image',
                       style: const TextStyle(
                           fontSize: 24,
                           color: Color.fromARGB(215, 110, 87, 87)),
@@ -288,10 +379,11 @@ class CameraWidgetState extends State {
                   //   },
                   //   child: const Text("Select Image"),
                   // ),
-                  (imageFiles.length != 0)
+                  (imageFiles.isNotEmpty)
                       ? ElevatedButton(
                           onPressed: () {
                             // _showChoiceDialog(context);
+                            onUpload();
                           },
                           style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.all(15.0),
@@ -326,12 +418,19 @@ class CameraWidgetState extends State {
   }
 
   void _openGallery(BuildContext context) async {
-    final pickedFile = await ImagePicker().pickMultiImage(
-        // source: ImageSource.gallery,
-        );
-    setState(() {
-      imageFiles = pickedFile!;
-    });
+    // final pickedFile = await ImagePicker().pickMultiImage(
+    //     // source: ImageSource.gallery,
+    //     );
+    // setState(() {
+    //   imageFiles = pickedFile!;
+    // });
+    final pickedFile = await ImagePicker().pickMultiImage();
+
+    if (pickedFile!.isNotEmpty) {
+      setState(() {
+        imageFiles.addAll(pickedFile);
+      });
+    }
 
     Navigator.pop(context);
   }
@@ -340,9 +439,14 @@ class CameraWidgetState extends State {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
     );
-    setState(() {
-      imageFiles.add(pickedFile!);
-    });
+    // setState(() {
+    //   imageFiles.add(pickedFile!);
+    // });
+    if (pickedFile != null) {
+      setState(() {
+        imageFiles.addAll([pickedFile]);
+      });
+    }
     Navigator.pop(context);
   }
 }

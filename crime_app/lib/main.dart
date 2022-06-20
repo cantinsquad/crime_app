@@ -1,4 +1,5 @@
 import 'package:crime_app/home.dart';
+import 'package:crime_app/imagepicker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.data != null) {
           SharedPreferences pref = snapshot.data;
           if (pref.getBool('auth') ?? false) {
-            home = const Home();
+            home = const CameraWidget();
           }
         }
         return MaterialApp(
