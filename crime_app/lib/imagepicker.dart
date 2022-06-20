@@ -15,7 +15,7 @@ class CameraWidget extends StatefulWidget {
 }
 
 class CameraWidgetState extends State {
-  PickedFile? imageFile = null;
+  List<XFile>? imageFileList = [];
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -77,9 +77,9 @@ class CameraWidgetState extends State {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Card(
-                child: (imageFile == null)
+                child: (imageFileList == null || imageFileList!.isEmpty)
                     ? const Text("")
-                    : Image.file(File(imageFile!.path)),
+                    : Image.file(File(imageFileList![0].path)),
               ),
               MaterialButton(
                 textColor: Colors.white,
@@ -89,7 +89,7 @@ class CameraWidgetState extends State {
                 },
                 child: const Text("Select Image"),
               ),
-              (imageFile != null)
+              (imageFileList != null)
                   ? MaterialButton(
                       textColor: Colors.white,
                       color: Colors.pink,
@@ -107,23 +107,26 @@ class CameraWidgetState extends State {
   }
 
   void _openGallery(BuildContext context) async {
-    final pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
-    setState(() {
-      imageFile = pickedFile!;
-    });
+    final pickedFile = await ImagePicker().pickMultiImage();
+
+    if (pickedFile!.isNotEmpty) {
+      setState(() {
+        imageFileList!.addAll(pickedFile);
+      });
+    }
 
     Navigator.pop(context);
   }
 
   void _openCamera(BuildContext context) async {
-    final pickedFile = await ImagePicker().getImage(
+    final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
     );
-    setState(() {
-      imageFile = pickedFile!;
-    });
+    if (pickedFile != null) {
+      setState(() {
+        imageFileList!.addAll([pickedFile]);
+      });
+    }
     Navigator.pop(context);
   }
 }

@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import 'home.dart';
 
@@ -19,12 +24,17 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
   var _image;
   var imagePicker;
   var type;
+  var uid = "";
+  List<XFile>? imageFileList = [];
 
   ImageFromGalleryExState(this.type);
 
   @override
   void initState() {
     super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    uid = user!.uid;
+
     imagePicker = ImagePicker();
   }
 
@@ -74,16 +84,14 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
           Center(
             child: GestureDetector(
               onTap: () async {
-                var source = type == ImageSourceType.camera
-                    ? ImageSource.camera
-                    : ImageSource.gallery;
-                XFile image = await imagePicker.pickImage(
-                    source: source,
-                    imageQuality: 50,
-                    preferredCameraDevice: CameraDevice.rear);
-                setState(() {
-                  _image = File(image.path);
-                });
+                final pickedFile = await ImagePicker().pickMultiImage();
+
+                if (pickedFile!.isNotEmpty) {
+                  setState(() {
+                    imageFileList!.addAll(pickedFile);
+                    _image = File(imageFileList![0].path);
+                  });
+                }
               },
               child: Container(
                 width: 200,
@@ -156,8 +164,47 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
             ),
           ),
           IconButton(
-              onPressed: () {
-                print(firnumber);
+              onPressed: () async {
+                final url = "https://f8bf-20-2-82-58.ap.ngrok.io/addReport";
+
+                var x = await getloc();
+
+                // Map d = {
+                //   "fir": firnumber,
+                //   "uid": uid,
+                //   "lat": x.latitude,
+                //   "long": x.longitude
+                // };
+
+                var request = http.MultipartRequest("POST", Uri.parse(url));
+
+                List<http.MultipartFile> newList = [];
+
+                for (var img in imageFileList!) {
+                  if (img.path != "") {
+                    var multipartFile = await http.MultipartFile.fromPath(
+                      'images',
+                      img.path,
+                      filename: img.name,
+                    );
+                    newList.add(multipartFile);
+                  }
+                }
+
+                request.files.addAll(newList);
+
+                request.fields['fir'] = firnumber;
+                request.fields['uid'] = uid;
+                request.fields['lat'] = x.latitude.toString();
+                request.fields['long'] = x.longitude.toString();
+
+                var resp = await request.send();
+
+                print(resp.statusCode);
+
+                resp.stream.transform(utf8.decoder).listen((value) {
+                  print(value);
+                });
               },
               icon: Icon(Icons.send))
         ],
