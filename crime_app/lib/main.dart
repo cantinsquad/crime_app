@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.data != null) {
           SharedPreferences pref = snapshot.data;
           if (pref.getBool('auth') ?? false) {
-            home = const FIROutput();
+            home = const CameraWidget();
           }
         }
         return MaterialApp(
